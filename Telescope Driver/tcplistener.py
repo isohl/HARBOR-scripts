@@ -3,10 +3,10 @@ import tcp_listener_base
 from Tkinter import *
 
 
-class TelescopeListener(TCPListenerBase):
+class TelescopeListener(tcp_listener_base.TCPListenerBase):
 	def receivePacket(self, key, value):
-		print key, value
-
-root = Tk()
-app = TelescopeListener(master=root)
-app.mainloop()
+		try:
+			print "setting telescope to altitude: %s azimuth: %s" % ( value['altitudeAngle'],  value['azimuth'] )
+		except KeyError:
+			pass
+tcp_listener_base.startupTCPListener(TelescopeListener)
