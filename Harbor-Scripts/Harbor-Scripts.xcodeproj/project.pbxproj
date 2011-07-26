@@ -13,12 +13,14 @@
 		361A0BEF13DF6A2E0013CF0B /* writetoKML.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = writetoKML.py; sourceTree = "<group>"; };
 		361A0BF013DF6A2E0013CF0B /* README */ = {isa = PBXFileReference; lastKnownFileType = text; name = README; path = ../README; sourceTree = "<group>"; };
 		361A0BF213DF6A750013CF0B /* tcplistener.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = tcplistener.py; path = "../Telescope Driver/tcplistener.py"; sourceTree = "<group>"; };
+		361A0BF413DF6DFA0013CF0B /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = __init__.py; path = ../tcp_listener_base/__init__.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		361A0BE213DF6A070013CF0B = {
 			isa = PBXGroup;
 			children = (
+				361A0BF313DF6DB00013CF0B /* tcp_listener_base */,
 				361A0BF113DF6A450013CF0B /* Telescope Driver */,
 				361A0BEB13DF6A2E0013CF0B /* Google Earth Plotter */,
 				361A0BF013DF6A2E0013CF0B /* README */,
@@ -43,6 +45,14 @@
 				361A0BF213DF6A750013CF0B /* tcplistener.py */,
 			);
 			name = "Telescope Driver";
+			sourceTree = "<group>";
+		};
+		361A0BF313DF6DB00013CF0B /* tcp_listener_base */ = {
+			isa = PBXGroup;
+			children = (
+				361A0BF413DF6DFA0013CF0B /* __init__.py */,
+			);
+			name = tcp_listener_base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
