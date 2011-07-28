@@ -14,7 +14,7 @@ done=False
 
 
 class Application(Frame):
-        def submit(self):
+        def submit(self,event):
                 self.ip=self.ipaddress.get()
                 if self.ip.lower() == "local":
                     self.localonly=True
@@ -39,15 +39,15 @@ class Application(Frame):
                 self.ipaddress = Entry(self, justify=CENTER)
                 self.ipaddress.pack()
                 self.ipaddress.insert(0,"xibook.local")
-
+                self.ipaddress.bind('<Return>',self.submit)
                 self.portaddress = Entry(self, justify=CENTER)
                 self.portaddress.pack()
                 self.portaddress.insert(0,54730)
-
+                self.portaddress.bind('<Return>',self.submit)
                 self.listeners = Entry(self, justify=CENTER,width=50)
                 self.listeners.pack()
                 self.listeners.insert(0,"KE7ROS, WB1SAR, N7RPG, KD7FDH, KE7WHZ, $PKWDPOS")
-                
+                self.listeners.bind('<Return>',self.submit)
                 self.submiter = Button(self)
                 self.submiter["text"] = "Submit",
                 self.submiter["command"] = self.submit
@@ -72,9 +72,14 @@ class Application(Frame):
                             server = socket.socket()
                             server.connect((self.ip,self.port))
                         else:
-                            filepath = os.path.expanduser('~')+"\\tnclogs\\tnc.log"
-                            f = open(filepath)
-                            savedtime=os.stat(filepath).st_mtime
+                                if os.name=="nt":
+                                    filepath = os.path.expanduser('~')+"\\tnclogs\\tnc.log"
+                                elif os.name=="posix":
+                                        filepath = os.path.expanduser("~/Documents/tnc.log")
+                                else:
+                                        print "UNKNOWN OPERATING SYSTEM. GET A LIFE."
+                                f = open(filepath)
+                                savedtime=os.stat(filepath).st_mtime
                         print "Successfully Connected"
                         while not done:
                                 incoming = ''
@@ -90,15 +95,14 @@ class Application(Frame):
                                     allLines = f.readlines()
                                     lastline = allLines[len(allLines)-1]
                                     print lastline
-                                        try:
+                                    try:
                                         compatible, listento = decodeTNC.determineCompatability(lastline,self.acceptedSigns)
-                                            
-                                            if compatible == True:
-                                                    if "PKWDPOS" in listento:listento='d710'
-                                                    lat,lon = decodeTNC.latlong(lastline)
-                                                    incoming={listento:{'latitude':lat,'longitude':lon}}
-                                                    print incoming
-                                        except TypeError:
+                                        if compatible == True:
+                                            if "PKWDPOS" in listento:listento='d710'
+                                            lat,lon = decodeTNC.latlong(lastline)
+                                            incoming={listento:{'latitude':lat,'longitude':lon}}
+                                            print incoming
+                                    except TypeError:
                                                 print "Unsolved TypeError, sucks to be you!"
 ##                                    except TypeError:
 
