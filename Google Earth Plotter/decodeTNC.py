@@ -3,35 +3,33 @@ import writetoKML
 done=False
 
 def delimit(rawdata):
-    splitonce = re.split('/|h|O',rawdata)
-##    print splitonce
-##    splittwice = splitonce[1].rsplit('h')
-##    print splittwice
-    if len(splitonce)>=7:
-        if 'A=' in splitonce[6]:
-            returnable = [splitonce[2],splitonce[3],splitonce[6]]
+    if "PKWDPOS" in rawdata:
+        splitonce = rawdata.split(',')
+        splittwice = rawdata[10].split('*')
+        if 'N' in splitonce[4] and 'W' in splitonce[6]:
+            returnable = [splitonce[3]+"N",splitonce[5]+"W","A="+splittwice[0]]
             return returnable
+    else:
+        splitonce = re.split('/|h|O',rawdata)
+        if len(splitonce)>=7:
+            if 'A=' in splitonce[6]:
+                returnable = [splitonce[2],splitonce[3],splitonce[6]]
+                return returnable
 
 
 def latlong(newdata):
-##    newdata = raw_input("APRS File: ")
-    if determineCompatability(newdata)==True:
-        output = delimit(newdata)
-        latitude = str(float(output[0][:2])+(float(output[0][2:7])/60))
-        longitude = "-"+str(float(output[1][:3])+(float(output[1][3:8])/60))
-        return longitude+','+latitude
-    else:
-        return
+    output = delimit(newdata)
+    latitude = str(float(output[0][:2])+(float(output[0][2:7])/60))
+    longitude = "-"+str(float(output[1][:3])+(float(output[1][3:8])/60))
+    return longitude,latitude
 
-def determineCompatability(APRSstring):
-    FILE = open('listener.txt','r')
-    listenfor = FILE.read()
-    listenfor = listenfor.split(',')
-    FILE.close()
+def determineCompatability(APRSstring,listenfor):
     if not done:
         for listento in listenfor:
-            if listento in APRSstring:
-                return True
+            if APRSstring.startswith(listento):
+                returnable = True, listento
+                print returnable
+                return returnable
     else:
         return False
 
