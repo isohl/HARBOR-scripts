@@ -16,4 +16,4 @@ def tile_info(lat, lon, zoom):
 	return int(tile_x),int(tile_y),zoom
 
 def createURL(lat, lon, zoom):
-	return "http://mt0.google.com/vt/lyrs=m@158000000&hl=en&x=%d&y=%d&z=%d&s=Ga" % tile_info(lat,lon,zoom) 
+	return "http://khm1.google.com/kh/v=89&x=%d&y=%d&z=%d&s=Ga" % tile_info(lat,lon,zoom) 
