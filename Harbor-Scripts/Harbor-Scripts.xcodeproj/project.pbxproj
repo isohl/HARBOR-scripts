@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		360B63FD13E11B6B00CDD7CE /* decodeTNC.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = decodeTNC.py; sourceTree = "<group>"; };
 		361A0BEC13DF6A2E0013CF0B /* Balloon Track.kml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Balloon Track.kml"; sourceTree = "<group>"; };
 		361A0BED13DF6A2E0013CF0B /* D710 Track.kml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "D710 Track.kml"; sourceTree = "<group>"; };
 		361A0BEE13DF6A2E0013CF0B /* readSocket.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = readSocket.py; sourceTree = "<group>"; };
@@ -37,6 +38,7 @@
 				361A0BED13DF6A2E0013CF0B /* D710 Track.kml */,
 				361A0BEE13DF6A2E0013CF0B /* readSocket.py */,
 				361A0BEF13DF6A2E0013CF0B /* writetoKML.py */,
+				360B63FD13E11B6B00CDD7CE /* decodeTNC.py */,
 			);
 			name = "Google Earth Plotter";
 			path = "../Google Earth Plotter";
