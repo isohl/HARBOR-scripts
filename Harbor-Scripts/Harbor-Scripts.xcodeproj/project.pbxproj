@@ -17,6 +17,7 @@
 		361A0BF413DF6DFA0013CF0B /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = __init__.py; path = ../tcp_listener_base/__init__.py; sourceTree = "<group>"; };
 		36316D9713E0BDA100F0E406 /* converter.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = converter.py; path = gmaps/converter.py; sourceTree = "<group>"; };
 		36316D9813E0BE4600F0E406 /* printer.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = printer.py; path = gmaps/printer.py; sourceTree = "<group>"; };
+		3649AC2513E3555C00AE1FA6 /* pictureMerger.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = pictureMerger.py; path = gmaps/pictureMerger.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -63,6 +64,7 @@
 		36316D9513E0BD7C00F0E406 /* gmaps */ = {
 			isa = PBXGroup;
 			children = (
+				3649AC2513E3555C00AE1FA6 /* pictureMerger.py */,
 				36316D9713E0BDA100F0E406 /* converter.py */,
 				36316D9813E0BE4600F0E406 /* printer.py */,
 			);
