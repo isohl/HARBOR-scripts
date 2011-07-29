@@ -5,6 +5,7 @@
 import converter
 import os
 import urllib2
+import Image
 
 frames = []
 framedata = {}
@@ -17,8 +18,21 @@ def getFrame(url):
     frame = page.read()
     return frame
 
-def pieceTogether(frames):
-    pass
+def pieceTogether():
+    final = Image.new("RGB",(tilesEast*256,tilesSouth*256))
+    for x in range(tilesEast):
+        for y in range(tilesSouth):
+            if (x,y) == furthest:
+                stop = True
+            newframe = Image.open(str(defaultPath)+"x"+str(originx+x)+" y"+str(originy+y)+" z"+str(zoomz)+".jpg")
+            final.paste(newframe,(x*256,y*256))
+            print "Combined: "+str(x)+", "+str(y)
+            if stop==True:
+                break
+        if stop==True:
+            break
+    final.save(str(defaultPath)+"final"+str(NWcorner)+" z"+str(zoomz)+".jpg")
+    print "Saved final image"
 
 def savePicture(picture,filepath):
     """Print a saved picture"""
@@ -46,9 +60,18 @@ zoomlevel = int(raw_input(""""What is the zoom level you want? (Min 2: country s
 Max 15: street block size) """))
 originx,originy,zoomz = converter.tile_info(NWlat,NWlon,zoomlevel)
 defaultPath = str(raw_input("What is the folder you want to dump images in? "))
-for etiles in range(tilesEast):
-    for stiles in range(tilesSouth):
-        curx = (originx+etiles)
-        cury = (originy+stiles)
-        pic = getFrame(("http://khm1.google.com/kh/v=89&x="+str(curx)+"&y="+str(cury)+"&z="+str(zoomz)+"&s=Ga"))
-        savePicture(pic,str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
+furthest = (0,0)
+try:
+    for etiles in range(tilesEast):
+        for stiles in range(tilesSouth):
+            curx = (originx+etiles)
+            cury = (originy+stiles)
+            pic = getFrame(("http://khm1.google.com/kh/v=89&x="+str(curx)+"&y="+str(cury)+"&z="+str(zoomz)+"&s=Ga"))
+            savePicture(pic,str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
+            print "x: "+str(etiles)+", y: "+str(stiles)
+            furthest = (etiles,stiles)
+except HTTPError:
+    print "OOPS! Google kicked you off the servers for being a bot, sucks to be you!"
+    print "\nFinishing PieceTogether in leu of a better idea"
+    
+pieceTogether()
