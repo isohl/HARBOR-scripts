@@ -20,6 +20,7 @@ def getFrame(url):
 
 def pieceTogether():
     final = Image.new("RGB",(tilesEast*256,tilesSouth*256))
+    stop=False
     for x in range(tilesEast):
         for y in range(tilesSouth):
             if (x,y) == furthest:
@@ -70,7 +71,8 @@ try:
             savePicture(pic,str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
             print "x: "+str(etiles)+", y: "+str(stiles)
             furthest = (etiles,stiles)
-except HTTPError:
+except Exception as error:
+    print error
     print "OOPS! Google kicked you off the servers for being a bot, sucks to be you!"
     print "\nFinishing PieceTogether in leu of a better idea"
     
