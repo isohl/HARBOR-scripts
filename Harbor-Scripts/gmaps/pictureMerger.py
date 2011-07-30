@@ -1,7 +1,7 @@
 """Yeah! The pictureMerger.py doesn't take pictures, or merge them, (at least
     at the moment) what it does do, is retrieve pictures from maps.google.com,
     and saves them as a handy-dandy file on your computer! """
-
+import time
 import converter
 import os
 import urllib2
@@ -51,15 +51,21 @@ print "Automatic Google Earth downloader"
 print """Areas are defined by the NorthWest Corner, how many miles east and south
             and size and zoom levels 'Google Maps Defined'"""
 NWcorner = raw_input("What are the latitude and longitude coordinates of your NW corner? ")
-NWlat,NWlon = NWcorner.split(",")
-NWlat,NWlon = float(NWlat),float(NWlon)
+if NWcorner.lower() != "manual":
+    NWlat,NWlon = NWcorner.split(",")
+    NWlat,NWlon = float(NWlat),float(NWlon)
 ##distanceEast = float(raw_input("How many miles East do you want the selection to go? "))
 ##distanceSouth = float(raw_input("How many miles South do you want the selection to go? "))
 tilesEast = int(raw_input("How many tiles to the East? "))
 tilesSouth = int(raw_input("How many tiles to the South? "))
 zoomlevel = int(raw_input(""""What is the zoom level you want? (Min 2: country sized,
 Max 15: street block size) """))
-originx,originy,zoomz = converter.tile_info(NWlat,NWlon,zoomlevel)
+if NWcorner.lower() == "manual":
+    originx = raw_input("Originx: ")
+    originy = raw_input("Originy: ")
+    zoomz = zoomlevel
+else:
+    originx,originy,zoomz = converter.tile_info(NWlat,NWlon,zoomlevel)
 defaultPath = str(raw_input("What is the folder you want to dump images in? "))
 furthest = (0,0)
 try:
@@ -71,6 +77,7 @@ try:
             savePicture(pic,str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
             print "x: "+str(etiles)+", y: "+str(stiles)
             furthest = (etiles,stiles)
+            time.sleep(1)
 except Exception as error:
     print error
     print "OOPS! Google kicked you off the servers for being a bot, sucks to be you!"
