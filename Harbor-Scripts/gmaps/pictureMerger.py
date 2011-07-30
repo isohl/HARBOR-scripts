@@ -19,14 +19,14 @@ def getFrame(url):
     return frame
 
 def pieceTogether():
-    final = Image.new("RGB",(tilesEast*256,tilesSouth*256))
+    final = Image.new("RGB",(tilesEast*256+tilesEast,tilesSouth*256+tilesSouth),"Black")
     stop=False
     for x in range(tilesEast):
         for y in range(tilesSouth):
             if (x,y) == furthest:
                 stop = True
             newframe = Image.open(str(defaultPath)+"x"+str(originx+x)+" y"+str(originy+y)+" z"+str(zoomz)+".jpg")
-            final.paste(newframe,(x*256,y*256))
+            final.paste(newframe,(x*257,y*257))
             print "Combined: "+str(x)+", "+str(y)
             if stop==True:
                 break
