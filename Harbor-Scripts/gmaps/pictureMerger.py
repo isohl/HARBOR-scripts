@@ -11,11 +11,18 @@ frames = []
 framedata = {}
 final = None
 
+def req(url):
+    proxy_support = urllib2.ProxyHandler({"http" : "127.0.0.1:8118"})
+    opener = urllib2.build_opener(proxy_support) 
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    return opener.open(url).read()
+
 def getFrame(url):
     """Pulls a frame from the google servers to a string object"""
-    opener = urllib2.build_opener()
-    page = opener.open(url)
-    frame = page.read()
+##    opener = urllib2.build_opener()
+##    page = opener.open(url)
+##    frame = page.read()
+    frame = req(url)
     return frame
 
 def pieceTogether():
@@ -68,19 +75,22 @@ else:
     originx,originy,zoomz = converter.tile_info(NWlat,NWlon,zoomlevel)
 defaultPath = str(raw_input("What is the folder you want to dump images in? "))
 furthest = (0,0)
-try:
-    for etiles in range(tilesEast):
-        for stiles in range(tilesSouth):
-            curx = (originx+etiles)
-            cury = (originy+stiles)
+##try:
+for etiles in range(tilesEast):
+    for stiles in range(tilesSouth):
+        curx = (originx+etiles)
+        cury = (originy+stiles)
+        filename = str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg"
+        fileexistance = os.path.exists(filename)
+        if fileexistance == False:
             pic = getFrame(("http://khm1.google.com/kh/v=89&x="+str(curx)+"&y="+str(cury)+"&z="+str(zoomz)+"&s=Ga"))
-            savePicture(pic,str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
-            print "x: "+str(etiles)+", y: "+str(stiles)
-            furthest = (etiles,stiles)
-            time.sleep(1)
-except Exception as error:
-    print error
-    print "OOPS! Google kicked you off the servers for being a bot, sucks to be you!"
-    print "\nFinishing PieceTogether in leu of a better idea"
+            savePicture(pic,filename)
+        print "x: "+str(etiles)+", y: "+str(stiles)
+        furthest = (etiles,stiles)
+        time.sleep(1)
+##except Exception as error:
+##    print error
+##    print "OOPS! Google kicked you off the servers for being a bot, sucks to be you!"
+##    print "\nFinishing PieceTogether in leu of a better idea"
     
 pieceTogether()
