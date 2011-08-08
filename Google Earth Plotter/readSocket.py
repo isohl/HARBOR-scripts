@@ -48,11 +48,11 @@ class Application(Frame):
                 self.listeners.pack()
                 self.listeners.insert(0,"KE7ROS, WB1SAR, N7RPG, KD7FDH, KE7WHZ, $PKWDPOS")
                 self.listeners.bind('<Return>',self.submit)
-                self.submiter = Button(self)
-                self.submiter["text"] = "Submit",
-                self.submiter["command"] = self.submit
-
-                self.submiter.pack()
+##                self.submiter = Button(self)
+##                self.submiter["text"] = "Submit",
+##                self.submiter["command"] = self.submit("YAY")
+##
+##                self.submiter.pack()
 
         def __init__(self, master=None):
                 self.localonly=False
@@ -99,9 +99,10 @@ class Application(Frame):
                                         compatible, listento = decodeTNC.determineCompatability(lastline,self.acceptedSigns)
                                         if compatible == True:
                                             if "PKWDPOS" in listento:listento='d710'
-                                            lat,lon = decodeTNC.latlong(lastline)
+                                            lon,lat = decodeTNC.latlong(lastline)
                                             incoming={listento:{'latitude':lat,'longitude':lon}}
                                             print incoming
+                                            
                                     except TypeError:
                                                 print "Unsolved TypeError, sucks to be you!"
 ##                                    except TypeError:

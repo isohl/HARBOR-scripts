@@ -39,3 +39,9 @@ def reverseEngineer(tile_x,tile_y,zoom):
     lat = rad_lat * 18 * math.pi
     lon = rad_lon * 18 * math.pi
     return lat,lon,zoom
+
+##latitude = float(raw_input("Latitude: "))
+##longitude = float(raw_input("Longitude: "))
+##zoomz = int(raw_input("zoom: "))
+##
+##print tile_info(latitude,longitude,zoomz)

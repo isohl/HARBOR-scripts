@@ -6,6 +6,9 @@ import converter
 import os
 import urllib2
 import Image
+from Tkinter import *
+import tkFileDialog
+
 
 frames = []
 framedata = {}
@@ -35,6 +38,31 @@ def pieceTogether():
     final.save(str(defaultPath)+"final"+str(NWcorner)+" z"+str(zoomz)+".jpg")
     print "Saved final image"
 
+def megaImage():
+    done=False
+    paths = []
+    root = Tk()
+    try:
+        while not done:
+            newpath = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select a directory')
+            paths.append(newpath)
+            getout = raw_input("Ctrl-C to finish")
+    except KeyboardInterrupt:
+        pass
+    print paths
+    zoom = raw_input("Zoom level")
+    maxx,maxy,minx,miny = 0,0,0,0
+    imglist = {}
+    for directory in paths:
+        filelist=os.listdir(directory)
+        for path in filelist
+            tempimg = Image.open(directory+path)
+            info = path.split(" ")
+            xvalue = info[0].strip("x")
+            y
+            imglist[path]={"Image":tempimg, "x":xvalue, "y":yvalue, "z":zvalue}
+
+    
 def savePicture(picture,filepath):
     """Print a saved picture"""
     """Note that the filepath on Windows is a bit buggy, and '\'s after the User
@@ -61,26 +89,33 @@ tilesSouth = int(raw_input("How many tiles to the South? "))
 zoomlevel = int(raw_input(""""What is the zoom level you want? (Min 2: country sized,
 Max 15: street block size) """))
 if NWcorner.lower() == "manual":
-    originx = raw_input("Originx: ")
-    originy = raw_input("Originy: ")
+    originx = int(raw_input("Originx: "))
+    originy = int(raw_input("Originy: "))
     zoomz = zoomlevel
 else:
     originx,originy,zoomz = converter.tile_info(NWlat,NWlon,zoomlevel)
 defaultPath = str(raw_input("What is the folder you want to dump images in? "))
 furthest = (0,0)
-try:
-    for etiles in range(tilesEast):
+
+
+
+for etiles in range(tilesEast):
         for stiles in range(tilesSouth):
             curx = (originx+etiles)
             cury = (originy+stiles)
-            pic = getFrame(("http://khm1.google.com/kh/v=89&x="+str(curx)+"&y="+str(cury)+"&z="+str(zoomz)+"&s=Ga"))
-            savePicture(pic,str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
+            try:
+                pic = getFrame(("http://khm1.google.com/kh/v=89&x="+str(curx)+"&y="+str(cury)+"&z="+str(zoomz)+"&s=Ga"))
+                savePicture(pic,str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
+            except Exception as error:
+                print error
+                if "HTTP" in str(error):
+                    print "Google bot exception, holding until proxy change..."
+                    raw_input("Press and key (and enter) to continue ")
+##                    f = open(str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
+##                    f.close()
             print "x: "+str(etiles)+", y: "+str(stiles)
             furthest = (etiles,stiles)
-            time.sleep(1)
-except Exception as error:
-    print error
-    print "OOPS! Google kicked you off the servers for being a bot, sucks to be you!"
-    print "\nFinishing PieceTogether in leu of a better idea"
+
+        
     
 pieceTogether()
