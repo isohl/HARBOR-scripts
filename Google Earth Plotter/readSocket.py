@@ -74,6 +74,7 @@ class Application(Frame):
                         else:
                                 if os.name=="nt":
                                     filepath = os.path.expanduser('~')+"\\tnclogs\\tnc.log"
+                                    print filepath
                                 elif os.name=="posix":
                                         filepath = os.path.expanduser("~/Documents/tnc.log")
                                 else:
@@ -85,8 +86,10 @@ class Application(Frame):
                                 incoming = ''
                                 if self.localonly==True:
                                     time = os.stat(filepath).st_mtime
+                                    print "Initial "+str(time)
                                     while time==savedtime:
-                                        time = os.stat(filepath).st_mtime                                    
+                                        time = os.stat(filepath).st_mtime
+##                                        print time
                                     savedtime=time
                                     f.close()
                                     f = open(filepath,'r')
