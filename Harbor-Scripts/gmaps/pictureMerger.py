@@ -29,6 +29,7 @@ def getFrame(url):
     return frame
 
 def pieceTogether():
+    import Image
     final = Image.new("RGB",(tilesEast*256+tilesEast,tilesSouth*256+tilesSouth),"Black")
     stop=False
     for x in range(tilesEast):
@@ -46,34 +47,58 @@ def pieceTogether():
     print "Saved final image"
 
 def megaImage():
+    import Image
     done=False
     paths = []
     root = Tk()
     try:
         while not done:
-            newpath = tkFileDialog.askdirectory(parent=root,initialdir="/",title='Please select a directory')
+            newpath = tkFileDialog.askdirectory(parent=root,initialdir="~",title='Please select a directory')
             paths.append(newpath)
             getout = raw_input("Ctrl-C to finish")
     except KeyboardInterrupt:
         pass
     print paths
-    zoom = raw_input("Zoom level")
-    maxx,maxy,minx,miny = 0,0,0,0
+##    zoom = raw_input("Zoom level: ")
+    maxx,maxy,minx,miny = 0,0,999999,999999
     imglist = {}
     for directory in paths:
         filelist=os.listdir(directory)
-        for path in filelist
-            tempimg = Image.open(directory+path)
+        for path in filelist:
+            fp = open(directory+"\\"+path,"rb")
+            tempimg = Image.open(fp)
+            tempimg.load()
             info = path.split(" ")
-            xvalue = info[0].strip("x")
-            y
+            xvalue = int(info[0].strip("x"))
+            yvalue = int(info[1].strip("y"))
+            zvalue = int(info[2].strip("z.jpg"))
             imglist[path]={"Image":tempimg, "x":xvalue, "y":yvalue, "z":zvalue}
-
+            if maxx<xvalue:maxx=xvalue
+            if maxy<yvalue:maxy=yvalue
+            if minx>xvalue:minx=xvalue
+            if miny>yvalue:miny=yvalue
+            fp.close()
+            print "Loaded %s from file" % path
+    maxwidth = maxx-minx
+    maxheight = maxy-miny
+    imagewidth = (maxwidth+1)*257
+    imageheight = (maxheight+1)*257
+    print "Composite size: "+str(imagewidth)+","+str(imageheight)
+    composite = Image.new("RGB",(imagewidth,imageheight),"Black")
+    print composite
+    for img in imglist:
+        topaste = imglist[img]["Image"]
+        pastex = int((imglist[img]["x"]-minx)*257)
+        pastey = int((imglist[img]["y"]-miny)*257)
+        composite.paste(topaste,(pastex,pastey))
+        print "Composited: "+img+" to final at: ("+str(pastex)+","+str(pastey)+")"
+    composite.save(tkFileDialog.asksaveasfilename(parent=root,initialdir="~",title="Save as"))
+    print "Saved To file"
     
 def savePicture(picture,filepath):
     """Print a saved picture"""
     """Note that the filepath on Windows is a bit buggy, and '\'s after the User
-            account name need to by double slashes."""
+            account name need to be double slashes."""
     f = open(filepath,'wb')
     f.write(picture)
     f.close()
@@ -103,46 +128,30 @@ else:
     originx,originy,zoomz = converter.tile_info(NWlat,NWlon,zoomlevel)
 defaultPath = str(raw_input("What is the folder you want to dump images in? "))
 furthest = (0,0)
-<<<<<<< HEAD
 
 
-
-for etiles in range(tilesEast):
-        for stiles in range(tilesSouth):
-            curx = (originx+etiles)
-            cury = (originy+stiles)
-            try:
-                pic = getFrame(("http://khm1.google.com/kh/v=89&x="+str(curx)+"&y="+str(cury)+"&z="+str(zoomz)+"&s=Ga"))
-                savePicture(pic,str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
-            except Exception as error:
-                print error
-                if "HTTP" in str(error):
-                    print "Google bot exception, holding until proxy change..."
-                    raw_input("Press and key (and enter) to continue ")
-##                    f = open(str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg")
-##                    f.close()
-            print "x: "+str(etiles)+", y: "+str(stiles)
-            furthest = (etiles,stiles)
-
-        
-=======
 ##try:
 for etiles in range(tilesEast):
     for stiles in range(tilesSouth):
-        curx = (originx+etiles)
-        cury = (originy+stiles)
-        filename = str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg"
-        fileexistance = os.path.exists(filename)
-        if fileexistance == False:
-            pic = getFrame(("http://khm1.google.com/kh/v=89&x="+str(curx)+"&y="+str(cury)+"&z="+str(zoomz)+"&s=Ga"))
-            savePicture(pic,filename)
-        print "x: "+str(etiles)+", y: "+str(stiles)
-        furthest = (etiles,stiles)
-        time.sleep(1)
+        while 1:
+            try:
+                curx = (originx+etiles)
+                cury = (originy+stiles)
+                filename = str(defaultPath)+"x"+str(curx)+" y"+str(cury)+" z"+str(zoomz)+".jpg"
+                fileexistance = os.path.exists(filename)
+                if fileexistance == False:
+                    pic = getFrame(("http://khm1.google.com/kh/v=89&x="+str(curx)+"&y="+str(cury)+"&z="+str(zoomz)+"&s=Ga"))
+                    savePicture(pic,filename)
+                print "x: "+str(etiles)+", y: "+str(stiles)
+                furthest = (etiles,stiles)
+                time.sleep(1)
+                break
+            except:
+                print "Unknown Error, retrying image"
+
 ##except Exception as error:
 ##    print error
 ##    print "OOPS! Google kicked you off the servers for being a bot, sucks to be you!"
 ##    print "\nFinishing PieceTogether in leu of a better idea"
->>>>>>> 4159935b0dfdce5923888384072d4d759f09033d
     
 pieceTogether()
